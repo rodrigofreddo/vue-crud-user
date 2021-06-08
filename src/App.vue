@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
   </div>
 </template>
@@ -16,8 +15,31 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 30px;
+}
+
+button {
+    cursor: pointer;
+    width: 180px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    line-height: 38px;
+    border: 1px solid #2c3e50;
+    margin-bottom: 16px;
+    transition: opacity ease .3s;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+button:hover {
+    opacity: .7;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 60px;
 }
 </style>
