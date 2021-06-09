@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
 }
 </script>
 
@@ -40,6 +40,6 @@ button:hover {
 
 .title {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
 }
 </style>

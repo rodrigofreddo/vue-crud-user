@@ -1,7 +1,13 @@
 <template>
     <div>
         <label :for="nameInput">{{ labelText }}</label>
-        <input :type="typeInput" :placeholder="placeholderInput" :name="nameInput" :id="idInput">
+        <input 
+            :value="value" 
+            @keyup="$emit('input', $event.target.value)" 
+            :type="typeInput" 
+            :placeholder="placeholderInput" 
+            :name="nameInput" 
+            :id="idInput">
     </div>
 </template>
 
@@ -9,6 +15,7 @@
 export default {
     name: "InputDefault",
     props: {
+        value: String,
         labelText: {
             type: String,
             required: true
