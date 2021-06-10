@@ -11,7 +11,7 @@
                 labelText="Full name"
             />
 
-            <label for="username">Username</label>
+            <label for="username">Username *</label>
             <input type="text" autocomplete="off" placeholder="Write a username" name="username" id="username" v-model="username" @keyup="verifyUser">
 
             <div class="msg-text">
@@ -32,21 +32,20 @@
                 nameInput="password"
                 placeholderInput="Write your password like Fg8horseGo192@!"
                 idInput="password"
-                labelText="A decent password"
+                labelText="A decent password *"
             />
 
-            <input-default
-                typeInput="password"
-                nameInput="passwordConfirm"
-                placeholderInput="Write the same password above"
-                idInput="passwordConfirm"
-                labelText="Confirm your password"
-            />
+            <label for="passwordConfirm">Confirm your password</label>
+            <input type="password" autocomplete="off" placeholder="Write your password again" name="passwordConfirm" id="passwordConfirm" @keyup="verifySamePass">
+
+            <div class="msg-text">
+                <div v-if="this.msg.length > 0" class="alert alert-danger" role="alert">{{ msg }}</div>
+            </div>
 
         </form>
 
         <div class="d-flex justify-content-between">
-            <button class="btn-primary" @click.prevent="addUser">Register</button>
+            <button v-if="!this.alreadyExist && !this.itsDifferent" class="btn-primary" @click.prevent="addUser">Register</button>
             <button class="btn-secondary" @click="$router.replace('/')">Cancel</button>
         </div>
 
@@ -70,7 +69,8 @@ export default {
             fullname: '',
             mail: '',
             msg: '',
-            alreadyExist: false
+            alreadyExist: false,
+            itsDifferent: false
         }
     },
     async created() {
@@ -80,6 +80,7 @@ export default {
     methods: {
         verifyUser: function(){
             this.alreadyExist = false;
+            //check already exist this username..
             for (var i = 0; i < this.users.length; i++) {
                 if (this.users[i].username == this.username) {
                     this.alreadyExist = true;
@@ -87,20 +88,46 @@ export default {
                 }
             }
         },
-        async addUser() {
-            if (!this.alreadyExist) {
-                const { data } = await axios.post("http://localhost:3000/users", {
-                    username: this.username,
-                    password: this.password
-                });
-
-                this.users = [...this.users, data];
-                this.username = '';
-                this.password = '';
-
-                this.$router.replace('/');
+        verifySamePass : function(event) {
+            this.itsDifferent = false;
+            let confirmPass = event.target.value;
+            
+            //check if the pass is the same..
+            if (confirmPass != this.password) {
+                this.itsDifferent = true;
+                this.msg = "It's not the same"
             } else {
-                this.msg = "The username already exist's, please write another";
+                //if yes, remove the error message
+                this.msg = ''
+            }
+        },
+        async addUser() {
+            if (this.username.length > 0 && this.password.length > 0) {
+                if (!this.alreadyExist) {
+                    if (!this.itsDifferent) {
+                        const { data } = await axios.post("http://localhost:3000/users", {
+                            username: this.username,
+                            password: this.password,
+                            fullname: this.fullname,
+                            mail: this.mail
+                        });
+
+                        //Clean the variables
+                        this.users = [...this.users, data];
+                        this.username = '';
+                        this.password = '';
+                        this.fullname = '';
+                        this.mail = '';
+
+                        this.$router.replace('/');
+                    } else {
+                        this.msg = "The password didn't has been confirmed";
+                    }
+                } else {
+                    this.msg = "The username already exist's, please write another";
+                }
+            } else {
+                this.msg = "Please fill the required field's";
             }
         }
     }

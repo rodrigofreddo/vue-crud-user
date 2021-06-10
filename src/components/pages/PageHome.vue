@@ -1,13 +1,6 @@
 <template>
   <div class="home">
     <h1 class="title">Welcome to Your Vue.js App</h1>
-
-    <ul>
-      <li v-for="user of users" :key="user.cpf">
-        {{ user.username }} {{ user.password }} 
-      </li>
-    </ul>
-
     <form-login/>
   </div>
 </template>

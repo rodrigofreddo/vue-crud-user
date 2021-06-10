@@ -7,6 +7,7 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 Vue.config.productionTip = false
+Vue.prototype.$currentlyUser = 0
 
 /* eslint-disable no-new */
 new Vue({

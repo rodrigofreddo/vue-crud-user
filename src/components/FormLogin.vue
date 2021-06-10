@@ -3,7 +3,7 @@
 
         <form id="formLogin" action="" method="post">
 
-            <input-default
+            <input-default v-model="username"
                 typeInput="text" 
                 nameInput="username" 
                 idInput="username" 
@@ -11,7 +11,7 @@
                 placeholderInput="Write your username"
             />
 
-            <input-default
+            <input-default v-model="password"
                 typeInput="password" 
                 nameInput="password" 
                 idInput="passwrod" 
@@ -21,16 +21,13 @@
 
         </form>
 
-        <div class="d-flex justify-content-between">
-            <login-button
-                text="Login"
-                className="btn-primary"
-            />
+        <div class="msg-text">
+            <div v-if="this.msg.length > 0" class="alert alert-danger" role="alert">{{ msg }}</div>
+        </div>
 
-            <create-user-button
-                text="Criar conta"
-                className="btn-secondary"
-            />
+        <div class="d-flex justify-content-between">
+            <button class="btn-primary" @click="authLogin">Sign in</button>
+            <button class="btn-secondary" @click="$router.replace('/create-account')">Sign up</button>
         </div>
 
     </div>
@@ -38,19 +35,45 @@
 
 <script>
 import InputDefault from './InputDefault'
-import LoginButton from './LoginButton'
-import CreateUserButton from './CreateUserButton'
+import axios from 'axios'
 
 export default {
-  name: 'FormLogin',
-  components: {
-      LoginButton,
-      CreateUserButton,
-      InputDefault
-  },
+    name: 'FormLogin',
+    components: {
+        InputDefault
+    },
+    data() {
+        return {
+            username: '',
+            password: '',
+            users: [],
+            msg: ''
+        }
+    },
+    async created() {
+        const { data } = await axios.get("http://localhost:3000/users");
+        this.users = data;
+    },
+    methods: {
+        authLogin: function() {
+            //check already exist this username with this pass..
+            for (var i = 0; i < this.users.length; i++) {
+                if (this.users[i].username == this.username && this.users[i].password == this.password) {
+                    //if has, go to the user's dashboard
+                    this.$currentlyUser = this.users[i].id;
+                    this.$router.replace('/dashboard');
+                    console.log(this.$currentlyUser);
+                } else {    
+                    this.msg = "That username with this password dosen't exist";
+                }
+            }
+        }
+    }
 }
 </script>
 
 <style scoped>
-    
+.msg-text {
+    height: 74px;
+}
 </style>
