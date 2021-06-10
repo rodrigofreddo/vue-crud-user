@@ -7,7 +7,8 @@
             :type="typeInput" 
             :placeholder="placeholderInput" 
             :name="nameInput" 
-            :id="idInput">
+            :id="idInput"
+        >
     </div>
 </template>
 

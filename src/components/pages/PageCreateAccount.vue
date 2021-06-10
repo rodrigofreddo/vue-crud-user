@@ -12,9 +12,12 @@
             />
 
             <label for="username">Username</label>
-            <input type="text" placeholder="Write a username" name="username" id="username" v-model="username" @keyup="verifyUser">
+            <input type="text" autocomplete="off" placeholder="Write a username" name="username" id="username" v-model="username" @keyup="verifyUser">
 
-            <div class="alert alert-danger" role="alert" v-if="this.alreadyExist">This username already exist</div>
+            <div class="msg-text">
+                <div v-if="this.alreadyExist && this.username.length > 0" class="alert alert-danger" role="alert">This username already exist</div>
+                <div v-else-if="this.username.length > 0" class="alert alert-success" role="alert">This username is fine</div>
+            </div>
 
             <input-default v-model="mail"
                 typeInput="mail"
@@ -41,10 +44,6 @@
             />
 
         </form>
-        
-        <div class="msg-text">
-            <div v-if="msg" class="alert alert-danger" role="alert">{{ msg }}</div>
-        </div>
 
         <div class="d-flex justify-content-between">
             <button class="btn-primary" @click.prevent="addUser">Register</button>
