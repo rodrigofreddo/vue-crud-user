@@ -14,7 +14,7 @@ export default new Router({
       component: PageHome
     },
     {
-      path: '/dashboard',
+      path: '/dashboard/:userID',
       name: 'Dashboard',
       component: PageDashboard
     },

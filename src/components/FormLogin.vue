@@ -59,10 +59,8 @@ export default {
             //check already exist this username with this pass..
             for (var i = 0; i < this.users.length; i++) {
                 if (this.users[i].username == this.username && this.users[i].password == this.password) {
-                    //if has, go to the user's dashboard
-                    this.$currentlyUser = this.users[i].id;
-                    this.$router.replace('/dashboard');
-                    console.log(this.$currentlyUser);
+                    //if has, set the currently user logged and go to the user's dashboard
+                    this.$router.replace(`/dashboard/${this.users[i].id}`);
                 } else {    
                     this.msg = "That username with this password dosen't exist";
                 }
