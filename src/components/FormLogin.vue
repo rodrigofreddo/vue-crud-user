@@ -62,7 +62,7 @@ export default {
                     //if has, set the currently user logged and go to the user's dashboard
                     this.$router.replace(`/dashboard/${this.users[i].id}`);
                 } else {    
-                    this.msg = "That username with this password dosen't exist";
+                    this.msg = "That username with this password doesn't exist";
                 }
             }
         }

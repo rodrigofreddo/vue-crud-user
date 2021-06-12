@@ -7,9 +7,9 @@
             <li v-if="user.mail">Mail: {{ user.mail }}</li>
         </ul>
 
-        <button class="btn-primary">Edit</button>
-        <button class="btn-danger">Delete Account</button>
-        <button class="btn-secondary" @click="$router.replace('/')">Sigh out</button>
+        <button class="btn-primary" @click="goToEditPage">Edit</button>
+        <button class="btn-danger" @click="delUser">Delete Account</button>
+        <button id="sign-out-btn" class="btn-secondary" @click="$router.replace('/')">Sigh out</button>
     </div>
 </template>
 
@@ -24,15 +24,25 @@ export default {
         }
     },
     async created() {
-        const { data } = await axios.get("http://localhost:3000/users");
-
         //Use the user id passing by param for the route, to find the currently user logged
-        this.user = data.find(user => user.id == this.$route.params.userID);
+        const { data } = await axios.get(`http://localhost:3000/users/${this.$route.params.userID}`);
+        this.user = data;
         
         //if dosen't found..
         if (!this.user) {
             //..comes back to the login page
             this.$router.replace('/');
+        }
+    },
+    methods: {
+        goToEditPage: function() {
+            this.$router.replace(`/edit-account/${this.user.id}`);
+        },
+        delUser: function() {
+            let deleted = axios.delete(`http://localhost:3000/users/${this.$route.params.userID}`, { data: this.users });
+            if (deleted) {
+                this.$router.replace('/');
+            }
         }
     }
 }

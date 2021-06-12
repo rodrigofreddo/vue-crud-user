@@ -27,16 +27,11 @@
                 labelText="Mail"
             />
 
-            <input-default v-model="password"
-                typeInput="password"
-                nameInput="password"
-                placeholderInput="Write your password like Fg8horseGo192@!"
-                idInput="password"
-                labelText="A decent password *"
-            />
+            <label for="password">A decent password *</label>
+            <input v-model="password" type="password" autocomplete="off" placeholder="Write your password like Fg8horseGo192@!" name="password" id="password" @keyup="verifySamePass">
 
             <label for="passwordConfirm">Confirm your password</label>
-            <input type="password" autocomplete="off" placeholder="Write your password again" name="passwordConfirm" id="passwordConfirm" @keyup="verifySamePass">
+            <input v-model="passwordConfirm" type="password" autocomplete="off" placeholder="Write your password again" name="passwordConfirm" id="passwordConfirm" @keyup="verifySamePass">
 
             <div class="msg-text">
                 <div v-if="this.msg.length > 0" class="alert alert-danger" role="alert">{{ msg }}</div>
@@ -66,6 +61,7 @@ export default {
             users: [],
             username: '',
             password: '',
+            passwordConfirm: '',
             fullname: '',
             mail: '',
             msg: '',
@@ -93,7 +89,7 @@ export default {
             let confirmPass = event.target.value;
             
             //check if the pass is the same..
-            if (confirmPass != this.password) {
+            if (confirmPass != this.password || confirmPass != this.passwordConfirm) {
                 this.itsDifferent = true;
                 this.msg = "It's not the same"
             } else {
@@ -102,7 +98,7 @@ export default {
             }
         },
         async addUser() {
-            if (this.username.length > 0 && this.password.length > 0) {
+            if (this.username.length > 0 && this.password.length > 0 && this.passwordConfirm.length > 0) {
                 if (!this.alreadyExist) {
                     if (!this.itsDifferent) {
                         const { data } = await axios.post("http://localhost:3000/users", {
