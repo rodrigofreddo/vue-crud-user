@@ -12,7 +12,7 @@
             />
 
             <label for="username">Username *</label>
-            <input type="text" autocomplete="off" placeholder="Write a username" name="username" id="username" v-model="username" @keyup="verifyUser">
+            <input type="text" placeholder="Write a username" name="username" id="username" v-model="username" @keyup="verifyUser">
 
             <div class="msg-text">
                 <div v-if="this.alreadyExist && this.username.length > 0" class="alert alert-danger" role="alert">This username already exist</div>
@@ -23,7 +23,7 @@
                 typeInput="mail"
                 nameInput="email"
                 placeholderInput="Write your mail like lorem@ipsum.com"
-                idInput="email"
+                idInput="mail"
                 labelText="Mail"
             />
 
@@ -78,23 +78,40 @@ export default {
             this.alreadyExist = false;
             //check already exist this username..
             for (var i = 0; i < this.users.length; i++) {
-                if (this.users[i].username == this.username) {
+                if (this.users[i].username === this.username) {
                     this.alreadyExist = true;
                     break;
                 }
             }
         },
         verifySamePass : function(event) {
+
+            //initialize the variable if is different and get the value of the target element
             this.itsDifferent = false;
-            let confirmPass = event.target.value;
+            let pass = event.target.value;
+
+            if (pass.length < 8) { //Verify if the pass has more then 8 characters
             
-            //check if the pass is the same..
-            if (confirmPass != this.password || confirmPass != this.passwordConfirm) {
-                this.itsDifferent = true;
-                this.msg = "It's not the same"
+                this.msg = "That password is too short";    
+
+            } else if (!/[0-9]/.test(pass)) { //Verify if the pass has numbers
+                
+                this.msg = "That password doesn't have numbers";
+                
+            } else if (!/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.test(pass)) { //Verify if the pass has symbols
+            
+                this.msg = "it's required at least one symbol at the password"
+            
             } else {
-                //if yes, remove the error message
-                this.msg = ''
+            
+                //check if the pass is the same..
+                if (pass !== this.password || pass !== this.passwordConfirm) {
+                    this.itsDifferent = true;
+                    this.msg = "It's not the same"
+                } else {
+                    //if yes, remove the error message
+                    this.msg = ''
+                }
             }
         },
         async addUser() {
@@ -115,6 +132,7 @@ export default {
                         this.fullname = '';
                         this.mail = '';
 
+                        //comes back to the login page
                         this.$router.replace('/');
                     } else {
                         this.msg = "The password didn't has been confirmed";
