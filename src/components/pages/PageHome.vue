@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1 class="title">Welcome to Your React.js App</h1>
+    <h1 class="title">Welcome to Your Vue.js App</h1>
     <form-login/>
   </div>
 </template>
